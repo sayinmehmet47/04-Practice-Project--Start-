@@ -1,8 +1,21 @@
 name: Issues
-on: issues
-jobs: 
-  output-info:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Output github context
-          run: echo ${{ toJSON(github.event) }}
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check for label
+      if: contains(github.event.issue.labels.*.name, 'bug')
+      run: |
+        echo "This is a bug. Proceeding with triage."
+    - name: Assign to team member
+      run: |
+        echo "Assigning issue to team member for further review."
+    - name: Add comment
+      run: |
+        echo "Thank you for reporting this issue. We will review and respond as soon as possible."
